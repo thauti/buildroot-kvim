@@ -1,0 +1,56 @@
+From bade488c1d7eb7ee6378180a0a6927331426bdae Mon Sep 17 00:00:00 2001
+From: Thomas Hautier <thauti.dev@protonmail.com>
+Date: Fri, 23 Nov 2018 03:36:10 +0100
+Subject: [PATCH] Linux: Remove customer directory
+
+---
+ Makefile                 | 2 +-
+ arch/arm64/Makefile      | 5 +----
+ scripts/kconfig/Makefile | 2 +-
+ 3 files changed, 3 insertions(+), 6 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index c607470e8eb3..ad6277bdacb9 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1147,7 +1147,7 @@ rpm: include/config/kernel.release FORCE
+ # Brief documentation of the typical targets used
+ # ---------------------------------------------------------------------------
+ 
+-boards := $(wildcard $(srctree)/arch/$(SRCARCH)/configs/meson*_defconfig $(srctree)/customer/arch/$(SRCARCH)/configs/*_defconfig)
++boards := $(wildcard $(srctree)/arch/$(SRCARCH)/configs/*_defconfig)
+ boards := $(notdir $(boards))
+ board-dirs := $(dir $(wildcard $(srctree)/arch/$(SRCARCH)/configs/*/*_defconfig))
+ board-dirs := $(sort $(notdir $(board-dirs:/=)))
+diff --git a/arch/arm64/Makefile b/arch/arm64/Makefile
+index 67719bfc4230..eae0ce0a3179 100644
+--- a/arch/arm64/Makefile
++++ b/arch/arm64/Makefile
+@@ -79,10 +79,7 @@ zinstall install: vmlinux
+ 	$(Q)$(MAKE) $(build)=$(boot) $@
+ 
+ %.dtb: scripts
+-	$(if $(filter $@,$(mesondtb)),\
+-	$(Q)$(MAKE) $(build)=$(boot)/dts/amlogic $(boot)/dts/amlogic/$@,\
+-	$(Q)$(MAKE) $(build)=customer/$(boot)/dts customer/$(boot)/dts/$@)
+-
++	$(Q)$(MAKE) $(build)=$(boot)/dts $(boot)/dts/$@
+ dtbs: scripts
+ 	$(Q)$(MAKE) $(build)=$(boot)/dts dtbs
+ 
+diff --git a/scripts/kconfig/Makefile b/scripts/kconfig/Makefile
+index 299d27aea330..7af3dada9cb8 100644
+--- a/scripts/kconfig/Makefile
++++ b/scripts/kconfig/Makefile
+@@ -102,7 +102,7 @@ else
+ endif
+ 
+ %_defconfig: $(obj)/conf
+-	$(Q)$< --defconfig=$(if $(filter $@,$(mesondefconfig)),,customer/)arch/$(SRCARCH)/configs/$@ $(Kconfig)
++	$(Q)$< $(silent) --defconfig=arch/$(SRCARCH)/configs/$@ $(Kconfig)
+ 
+ # Help text used by make help
+ help:
+-- 
+2.19.1
+
