@@ -40,18 +40,14 @@ else
 MSMTP_CONF_OPTS += --without-libsecret
 endif
 
-ifeq ($(BR2_PACKAGE_OPENSSL),y)
-MSMTP_CONF_OPTS += --with-ssl=openssl
-MSMTP_DEPENDENCIES += openssl
-ifeq ($(BR2_STATIC_LIBS),y)
-# openssl uses zlib, so we need to explicitly link with it when static
-MSMTP_CONF_ENV += LIBS=-lz
-endif
-else ifeq ($(BR2_PACKAGE_GNUTLS),y)
-MSMTP_CONF_OPTS += --with-ssl=gnutls
+ifeq ($(BR2_PACKAGE_GNUTLS),y)
+MSMTP_CONF_OPTS += --with-tls=gnutls
 MSMTP_DEPENDENCIES += gnutls
+else ifeq ($(BR2_PACKAGE_OPENSSL),y)
+MSMTP_CONF_OPTS += --with-tls=openssl
+MSMTP_DEPENDENCIES += openssl
 else
-MSMTP_CONF_OPTS += --with-ssl=no
+MSMTP_CONF_OPTS += --with-tls=no
 endif
 
 $(eval $(autotools-package))

@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-IWD_VERSION = 0.11
+IWD_VERSION = 0.13
 IWD_SITE = https://git.kernel.org/pub/scm/network/wireless/iwd.git
 IWD_SITE_METHOD = git
 IWD_LICENSE = LGPL-2.1+
@@ -22,7 +22,7 @@ endef
 IWD_POST_PATCH_HOOKS += IWD_MKDIR_BUILD_AUX
 
 ifeq ($(BR2_PACKAGE_DBUS),y)
-IWD_CONF_OPTS += --enable-dbus-policy
+IWD_CONF_OPTS += --enable-dbus-policy --with-dbus-datadir=/usr/share
 IWD_DEPENDENCIES += dbus
 else
 IWD_CONF_OPTS += --disable-dbus-policy

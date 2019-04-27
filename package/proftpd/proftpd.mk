@@ -22,7 +22,8 @@ PROFTPD_CONF_OPTS = \
 	--disable-dso \
 	--enable-sendfile \
 	--enable-shadow \
-	--with-gnu-ld
+	--with-gnu-ld \
+	--without-openssl-cmdline
 
 ifeq ($(BR2_PACKAGE_PROFTPD_MOD_REWRITE),y)
 PROFTPD_MODULES += mod_rewrite
@@ -45,6 +46,11 @@ endif
 
 ifeq ($(BR2_PACKAGE_PROFTPD_MOD_SQL),y)
 PROFTPD_MODULES += mod_sql
+endif
+
+ifeq ($(BR2_PACKAGE_PROFTPD_MOD_SQL_SQLITE),y)
+PROFTPD_MODULES += mod_sql_sqlite
+PROFTPD_DEPENDENCIES += sqlite
 endif
 
 ifeq ($(BR2_PACKAGE_PROFTPD_MOD_QUOTATAB),y)
